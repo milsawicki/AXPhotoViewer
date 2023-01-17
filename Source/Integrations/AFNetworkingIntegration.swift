@@ -20,7 +20,6 @@ class AFNetworkingIntegration: NSObject, AXNetworkIntegrationProtocol {
         if photo.imageData != nil || photo.image != nil {
             AXDispatchUtils.executeInBackground { [weak self] in
                 guard let `self` = self else { return }
-                
                 self.delegate?.networkIntegration(self, loadDidFinishWith: photo)
             }
             return
@@ -112,7 +111,7 @@ class AFNetworkingIntegration: NSObject, AXNetworkIntegrationProtocol {
     
 }
 
-/// An `AFHTTPSesssionManager` with our subclassed `AXAFImageResponseSerializer`.
+/// An `AFHTTPSesssionManager` with our subclassed `AXImageResponseSerializer`.
 class AXHTTPSessionManager: AFHTTPSessionManager {
     
     static let shared = AXHTTPSessionManager()
@@ -132,10 +131,7 @@ class AXHTTPSessionManager: AFHTTPSessionManager {
 class AXImageResponseSerializer: AFImageResponseSerializer {
     
     override func responseObject(for response: URLResponse?, data: Data?, error: NSErrorPointer) -> Any? {
-        if let `data` = data, data.containsGIF() {
-            return data
-        }
-        
+        if let `data` = data, data.containsGIF() { return data }
         return super.responseObject(for: response, data: data, error: error)
     }
     

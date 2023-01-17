@@ -106,7 +106,6 @@ import FLAnimatedImage
     
     fileprivate func configure(with index: Int) {
         guard let photo = self.dataSource.photo(at: index) else { return }
-        
         self.networkIntegration.loadPhoto(photo)
     }
     

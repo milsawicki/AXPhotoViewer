@@ -10,7 +10,7 @@
 import Kingfisher
 
 class KingfisherIntegration: NSObject, AXNetworkIntegrationProtocol {
-
+    
     weak public var delegate: AXNetworkIntegrationDelegate?
 
     fileprivate var retrieveImageTasks: [Int: DownloadTask] = [:]
@@ -71,17 +71,17 @@ class KingfisherIntegration: NSObject, AXNetworkIntegrationProtocol {
                 }
             }
         }
-
+        
         let task = KingfisherManager.shared.retrieveImage(with: url, options: nil, progressBlock: progress, completionHandler: completion)
         self.retrieveImageTasks[photo.hash] = task
     }
-
+    
     func cancelLoad(for photo: AXPhotoProtocol) {
         guard let downloadTask = self.retrieveImageTasks[photo.hash] else { return }
 
         downloadTask.cancel()
     }
-
+    
     func cancelAllLoads() {
         self.retrieveImageTasks.forEach({ $1.cancel() })
         self.retrieveImageTasks.removeAll()

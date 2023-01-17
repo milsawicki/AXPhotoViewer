@@ -411,7 +411,7 @@ class AXPhotosDismissalAnimator: AXPhotosTransitionAnimator, UIViewControllerInt
         let overlayView = photosViewController.overlayView
         let animations = { [weak self] () in
             guard let `self` = self else { return }
-            
+
             imageView.center.y = self.imageViewInitialCenter.y
             overlayView.topStackContainer.frame.origin.y = self.topStackContainerInitialOriginY
             overlayView.bottomStackContainer.frame.origin.y = self.bottomStackContainerInitialOriginY

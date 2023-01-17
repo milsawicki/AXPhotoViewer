@@ -452,7 +452,6 @@ import FLAnimatedImage_tvOS
         self.overlayView.performAfterShowInterfaceCompletion { [weak self] in
             // if being dismissed, let's just return early rather than update insets
             guard let `self` = self, !self.isBeingDismissed else { return }
-            
             self.updateOverlayInsets()
         }
     }
@@ -534,6 +533,7 @@ import FLAnimatedImage_tvOS
                                                    animated: animated,
                                                    completion: nil)
         self.loadPhotos(at: photoIndex)
+        self.currentPhotoIndex = photoIndex
     }
     
     // MARK: - Page VC Configuration
@@ -906,13 +906,11 @@ import FLAnimatedImage_tvOS
     // MARK: - UIPageViewControllerDataSource
     public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         guard let viewController = pendingViewControllers.first as? AXPhotoViewController else { return }
-        
         self.loadPhotos(at: viewController.pageIndex)
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard let viewController = pageViewController.viewControllers?.first as? AXPhotoViewController else { return }
-        
         self.reduceMemoryForPhotos(at: viewController.pageIndex)
     }
     
@@ -936,14 +934,12 @@ import FLAnimatedImage_tvOS
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAt index: Int) -> UIViewController? {
         guard index >= 0 && self.dataSource.numberOfPhotos > index else { return nil }
-        
         return self.makePhotoViewController(for: index)
     }
     
     // MARK: - AXPhotoViewControllerDelegate
     public func photoViewController(_ photoViewController: AXPhotoViewController, retryDownloadFor photo: AXPhotoProtocol) {
         guard photo.ax_loadingState != .loading && photo.ax_loadingState != .loaded else { return }
-        
         photo.ax_error = nil
         photo.ax_loadingState = .loading
         self.networkIntegration.loadPhoto(photo)
